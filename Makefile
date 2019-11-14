@@ -187,7 +187,20 @@ Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc.c \
 Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc_bot.c \
 Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc_scsi.c \
 Drivers/helix/mp3dec.c \
-Drivers/helix/*
+Drivers/helix/mp3tabs.c	\
+Drivers/helix/real/bitsream.c \
+Drivers/helix/real/buffers.c \
+Drivers/helix/real/dct32.c \
+Drivers/helix/real/dequant.c \
+Drivers/helix/real/dqchan.c \
+Drivers/helix/real/huffman.c \
+Drivers/helix/real/hufftabs.c \
+Drivers/helix/real/imdct.c \
+Drivers/helix/real/polyphase.c \
+Drivers/helix/real/scalfact.c \
+Drivers/helix/real/stproc.c \
+Drivers/helix/real/subband.c \
+Drivers/helix/real/trigtabs_fixpt.c
 
 
 PROJECT_SRC = \
