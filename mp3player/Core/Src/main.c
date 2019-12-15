@@ -246,6 +246,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART6_UART_Init();
   MX_TIM7_Init();
+
   /* USER CODE BEGIN 2 */
   debug_init(&huart1);
 

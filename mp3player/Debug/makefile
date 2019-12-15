@@ -59,8 +59,8 @@ mp3player.list \
 all: mp3player.elf secondary-outputs
 
 # Tool invocations
-mp3player.elf: $(OBJS) $(USER_OBJS) C:\Users\Teeninga\STM32CubeIDE\workspace_1.1.0\mp3player\STM32F746NGHX_FLASH.ld
-	arm-none-eabi-gcc -o "mp3player.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Teeninga\STM32CubeIDE\workspace_1.1.0\mp3player\STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mp3player.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+mp3player.elf: $(OBJS) $(USER_OBJS) /Users/oscarteeninga/Library/Mobile\ Documents/com~apple~CloudDocs/Informatyka\ IET/Semestr\ 5/Systemy\ Wbudowane/workspace/SWProjekt/mp3player/STM32F746NGHX_FLASH.ld
+	arm-none-eabi-gcc -o "mp3player.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"/Users/oscarteeninga/Library/Mobile Documents/com~apple~CloudDocs/Informatyka IET/Semestr 5/Systemy Wbudowane/workspace/SWProjekt/mp3player/STM32F746NGHX_FLASH.ld" --specs=nosys.specs -Wl,-Map="mp3player.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
