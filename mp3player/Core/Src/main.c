@@ -1455,7 +1455,7 @@ void StartDefaultTask(void const * argument)
   ////////////////////////////
 
   xprintf("Starting player...\n");
-  mp3_player_fsm("1:/");
+  mp3_player_main("1:/");
   xprintf("Player finished\n");
   
 

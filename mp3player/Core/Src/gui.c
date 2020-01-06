@@ -20,7 +20,7 @@
 #define LAYER_FG 1
 #define LAYER_BG 0
 
-#define CONTROL_BUTTON_SCALE 0.17
+#define CONTROL_BUTTON_SCALE 0.16
 #define CONTROL_BUTTON_SIZE CONTROL_BUTTON_SCALE * LCD_X_SIZE
 #define CONTROL_BUTTONS_NUMBER 4
 
@@ -35,6 +35,7 @@
 #define TEXT_COLOR LCD_COLOR_WHITE
 #define BAR_COLOR LCD_COLOR_WHITE
 #define VOLUME_BAR_COLOR LCD_COLOR_ORANGE
+#define TIME_COLOR LCD_COLOR_WHITE
 
 #define BUTTON_Y_POSITION 0.6
 #define BAR_Y_POSITION 0.91
@@ -63,6 +64,7 @@ int initialize_touchscreen(void);
 void touchscreen_loop_init(void);
 Mp3_Player_State check_touchscreen();
 void update_progress_bar(double);
+void update_actual_time(int);
 uint16_t getXPix (double factor);
 uint16_t getYPix (double factor);
 void refresh_screen(const char *info_text);
@@ -204,31 +206,46 @@ Mp3_Player_State check_touchscreen()
 	return EMPTY;
 }
 
-// Update the visual progress bar for the current song
-// INPUT: progress - floating point value of 0 to 1 indicating the part of the whole song which has already been played
-void update_progress_bar(double progress) {
+void update_actual_time(int time) {
+	BSP_LCD_SelectLayer(LAYER_FG);
+	BSP_LCD_SetTextColor(BG_COLOR);
+	BSP_LCD_FillRect(0, LCD_Y_SIZE - 75, 100, 75);
+	BSP_LCD_SetTextColor(TIME_COLOR);
+	char buf[50];
+	sprintf(buf, " %d:%d%d", time/60, (time%60)/10, time%10);
+	BSP_LCD_DisplayStringAt(0, LCD_Y_SIZE - 34, (unsigned char *) buf, LEFT_MODE);
+}
 
+void show_full_time(int time) {
+	BSP_LCD_SelectLayer(LAYER_FG);
+	BSP_LCD_SetTextColor(BG_COLOR);
+	BSP_LCD_FillRect(LCD_X_SIZE-100, LCD_Y_SIZE - 75, 100, 75);
+	BSP_LCD_SetTextColor(TIME_COLOR);
+	char buf[50];
+	sprintf(buf, " %d:%d%d", time/60, (time%60)/10, time%10);
+	BSP_LCD_DisplayStringAt(LCD_X_SIZE-100, LCD_Y_SIZE - 34, (unsigned char *) buf, LEFT_MODE);
+}
+
+void update_progress_bar(double progress) {
 	BSP_LCD_SelectLayer(LAYER_FG);
 
 	double epsilon = 1e-2;
 	if(progress <= epsilon) {
 		BSP_LCD_SetTextColor(BG_COLOR);
-		BSP_LCD_FillRect(0, YPix(BAR_Y_POSITION) - 1, LCD_X_SIZE, 7);
+		BSP_LCD_FillRect(100, YPix(BAR_Y_POSITION), LCD_X_SIZE - 200, 7);
 		return;
 	}
 
 	BSP_LCD_SetTextColor(BAR_COLOR);
-	BSP_LCD_FillRect(40, YPix(BAR_Y_POSITION),  (uint16_t)(progress * (LCD_X_SIZE - 80)), 5);
+	BSP_LCD_FillRect(100, YPix(BAR_Y_POSITION),  (uint16_t)(progress * (LCD_X_SIZE - 200)), 5);
 }
 
 void update_volume_bar(int volume) {
 	BSP_LCD_SelectLayer(LAYER_FG);
 	BSP_LCD_SetTextColor(FG_COLOR);
-	BSP_LCD_FillRect(30, 29, LCD_X_SIZE, 17);
+	BSP_LCD_FillRect(44, 29, LCD_X_SIZE - 88, 17);
 	BSP_LCD_SetTextColor(VOLUME_BAR_COLOR);
-	BSP_LCD_FillRect(30, 30, (uint16_t)(volume * (LCD_X_SIZE - 60)/100), 15);
-
-
+	BSP_LCD_FillRect(45, 30, (uint16_t)(volume * (LCD_X_SIZE - 90)/100), 15);
 }
 
 void refresh_screen(const char *info_text) {
@@ -258,6 +275,7 @@ void draw_buttons() {
 	yButton = buttonsLeftUpper[0][1];
 	Point Points1[]= {{xButton + 7, yButton + CONTROL_BUTTON_SIZE / 2}, {xButton + CONTROL_BUTTON_SIZE / 2, yButton + 7}, 
 		{xButton + CONTROL_BUTTON_SIZE / 2, yButton + 7 + CONTROL_BUTTON_SIZE*0.806}};
+
 	// Control button size in pixels is 72
 	BSP_LCD_FillPolygon(Points1, 3);
 	Points1[0].X += CONTROL_BUTTON_SIZE*0.4;
@@ -268,8 +286,13 @@ void draw_buttons() {
 	// Play/Pause button label
 	update_play_pause_button();
 
+	// Volume control button
 	BSP_LCD_SetTextColor(BUTTON_COLOR);
+	BSP_LCD_DisplayStringAt(15, 29, (unsigned char *)"-", LEFT_MODE);
+	BSP_LCD_DisplayStringAt(LCD_X_SIZE - 30, 29, (unsigned char *)"+", LEFT_MODE);
+
 	// Stop button label
+	BSP_LCD_SetTextColor(BUTTON_COLOR);
 	xButton = buttonsLeftUpper[2][0];
 	yButton = buttonsLeftUpper[2][1];
 	BSP_LCD_FillRect(xButton, yButton + 7, CONTROL_BUTTON_SIZE - 14, CONTROL_BUTTON_SIZE - 14);
