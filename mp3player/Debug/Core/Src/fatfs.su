@@ -1,2 +1,0 @@
-fatfs.c:64:6:MX_FATFS_Init	16	static
-fatfs.c:88:7:get_fattime	0	static

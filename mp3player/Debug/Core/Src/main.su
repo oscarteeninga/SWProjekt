@@ -1,7 +1,0 @@
-main.c:1433:6:StartDefaultTask	8	static
-main.c:170:5:__io_putchar	0	static
-main.c:182:6:inkey	0	static
-main.c:315:6:SystemClock_Config	232	static
-main.c:202:5:main	176	static
-main.c:1475:6:HAL_TIM_PeriodElapsedCallback	0	static
-main.c:1494:6:_Error_Handler	0	static
