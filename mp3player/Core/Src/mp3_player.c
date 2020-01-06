@@ -178,7 +178,7 @@ void mp3_player_main(const char* path)
 				update_progress_bar(0);
                 reset_player_state();
                 currentFilePosition = 0;
-				sprintf(gui_info_text, "STOPPED");
+				sprintf(gui_info_text, "STOP");
 				refresh_screen(gui_info_text);
                 while(state == STOP) {
                     Mp3_Player_State newState = check_touchscreen();
@@ -237,6 +237,7 @@ void mp3_player_play(void)
 			} else if (newState != EMPTY)
 				state = newState;
             if (!has_been_paused && state == PAUSE) {
+				sprintf(gui_info_text, "%s", paths[currentFilePosition]);
 				refresh_screen(gui_info_text);
 				if(BSP_AUDIO_OUT_Pause() != AUDIO_OK) {
 					xprintf("Error while pausing stream\n");
@@ -251,9 +252,9 @@ void mp3_player_play(void)
 					return;
 				}
 				has_been_paused = 0;
-			}  else if (has_been_paused && state == PAUSE)
+			} else if (has_been_paused && state == PAUSE) {
 				continue;
-			else if (state != PLAY) {
+			} else if (state != PLAY) {
                 break;
             }
 		}

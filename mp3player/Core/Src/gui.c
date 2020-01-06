@@ -22,7 +22,7 @@
 
 #define CONTROL_BUTTON_SCALE 0.16
 #define CONTROL_BUTTON_SIZE CONTROL_BUTTON_SCALE * LCD_X_SIZE
-#define CONTROL_BUTTONS_NUMBER 4
+#define CONTROL_BUTTONS_NUMBER 6
 
 #define TICKS_DELTA 100
 
@@ -51,8 +51,11 @@ uint16_t buttonsLeftUpper[CONTROL_BUTTONS_NUMBER][2] = {
 	{XPix(0.08), YPix(BUTTON_Y_POSITION)},
 	{XPix(0.31), YPix(BUTTON_Y_POSITION)},
 	{XPix(0.54), YPix(BUTTON_Y_POSITION)},
-	{XPix(0.77), YPix(BUTTON_Y_POSITION)} };
-Mp3_Player_State buttonState[4] = { PREV, PLAY, STOP, NEXT };
+	{XPix(0.77), YPix(BUTTON_Y_POSITION)},
+	{0, 0},
+	{XPix(0.9), 0}
+};
+Mp3_Player_State buttonState[CONTROL_BUTTONS_NUMBER] = { PREV, PLAY, STOP, NEXT, VOLUMEDOWN, VOLUMEUP };
 Mp3_Player_State playButtonState = PLAY;
 uint32_t lastTicks = 0;
 
@@ -193,15 +196,13 @@ Mp3_Player_State check_touchscreen()
 				return STOP;
 			}
 
-			else
+			else {
+				if (buttonState[i] == PREV || buttonState[i] == NEXT) {
+					playButtonState = PLAY;
+				}
 				return buttonState[i];
+			}
 		}
-	}
-	if (newX <= 80 && newY <= 80) {
-		return VOLUMEDOWN;
-	}
-	if (newX >= LCD_X_SIZE-80 && newY <= 80) {
-		return VOLUMEUP;
 	}
 	return EMPTY;
 }
