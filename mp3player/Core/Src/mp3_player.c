@@ -14,10 +14,6 @@
 #include "term_io.h"
 #include "dbgu.h"
 #include "ansi.h"
-
-#define DEBUG_ON 0
-#define DEBUG_ON_FRAME 0
-
 // Data read from the USB and fed to the MP3 Decoder
 #define READ_BUFFER_SIZE 2 * MAINBUF_SIZE// + 216
 
@@ -28,11 +24,11 @@
 #define AUDIO_OUT_BUFFER_SIZE 2 * DECODED_MP3_FRAME_SIZE
 
 // State of the offset of the BSP output buffer
-typedef enum BSP_BUFFER_STATE_TAG {
-    BUFFER_OFFSET_NONE = 0,
-    BUFFER_OFFSET_HALF,
-    BUFFER_OFFSET_FULL,
-} BSP_BUFFER_STATE;
+typedef enum BUFFER_STATE_ENUM {
+    NONE = 0,
+    HALF,
+    FULL,
+} BUFFER_STATE;
 
 /* ------------------------------------------------------------------- */
 
@@ -41,7 +37,7 @@ Mp3_Player_State state;
 short output_buffer[AUDIO_OUT_BUFFER_SIZE];
 uint8_t input_buffer[READ_BUFFER_SIZE];
 static uint8_t *current_ptr;
-static BSP_BUFFER_STATE out_buf_offs = BUFFER_OFFSET_NONE;
+static BUFFER_STATE out_buf_offs = NONE;
 FIL input_file;
 char** paths;
 int mp3FilesCounter = 0;
@@ -259,7 +255,7 @@ void mp3_player_play(void)
             }
 		}
 		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-		out_buf_offs = BUFFER_OFFSET_NONE;
+		out_buf_offs = NONE;
 	}
 	else
 	{
@@ -314,16 +310,16 @@ int mp3_player_process_frame(void)
 	if (buffer_leftover < MAINBUF_SIZE && fill_input_buffer() != 0) return EOF;
 
 	// decode the right portion of the buffer
-	if(out_buf_offs == BUFFER_OFFSET_HALF)
+	if(out_buf_offs == HALF)
 	{
 		decode_result = MP3Decode(hMP3Decoder, &current_ptr, &buffer_leftover, output_buffer, 0);
-		out_buf_offs = BUFFER_OFFSET_NONE;
+		out_buf_offs = NONE;
 	}
 
-	if(out_buf_offs == BUFFER_OFFSET_FULL)
+	if(out_buf_offs == FULL)
 	{
 		decode_result = MP3Decode(hMP3Decoder, &current_ptr, &buffer_leftover, &output_buffer[DECODED_MP3_FRAME_SIZE], 0);
-		out_buf_offs = BUFFER_OFFSET_NONE;
+		out_buf_offs = NONE;
 	}
 
 	// check results of the decoding process
@@ -346,7 +342,7 @@ int mp3_player_process_frame(void)
 // Callback when half of audio out buffer is transefered
 void BSP_AUDIO_OUT_TransferComplete_CallBack(void)
 {
-    out_buf_offs = BUFFER_OFFSET_FULL;
+    out_buf_offs = FULL;
 
 	if(mp3_player_process_frame() != 0)
 	{
@@ -358,7 +354,7 @@ void BSP_AUDIO_OUT_TransferComplete_CallBack(void)
 // Callback when all of audio out buffer is transefered
 void BSP_AUDIO_OUT_HalfTransfer_CallBack(void)
 {
-    out_buf_offs = BUFFER_OFFSET_HALF;
+    out_buf_offs = HALF;
 
 	if(mp3_player_process_frame() != 0)
 	{
@@ -411,5 +407,5 @@ void reset_player_state()
 {
 	buffer_leftover = 0;
     current_ptr = NULL;
-    out_buf_offs = BUFFER_OFFSET_NONE;
+    out_buf_offs = NONE;
 }
