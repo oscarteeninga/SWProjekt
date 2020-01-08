@@ -34,17 +34,17 @@ typedef enum BUFFER_STATE_ENUM {
 
 static HMP3Decoder hMP3Decoder;
 Mp3_Player_State state;
-short output_buffer[AUDIO_OUT_BUFFER_SIZE];
 uint8_t input_buffer[READ_BUFFER_SIZE];
 static uint8_t *current_ptr;
-static BUFFER_STATE out_buf_offs = NONE;
+int currentFilePosition = -1;
+short output_buffer[AUDIO_OUT_BUFFER_SIZE];
 FIL input_file;
+static BUFFER_STATE out_buf_offs = NONE;
 char** paths;
 int mp3FilesCounter = 0;
-int currentFilePosition = -1;
+int volume = 50;
 int currentFileBytes = 0;
 int currentFileBytesRead = 0;
-int volume = 50;
 int bitrate = 0;
 static int buffer_leftover = 0;
 static int in_buf_offs;

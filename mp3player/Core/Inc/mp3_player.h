@@ -1,7 +1,7 @@
 #ifndef MP3_PLAYER_H_
 #define MP3_PLAYER_H_
 
-void mp3_player_fsm(const char*);
+void mp3_player_main(const char*);
 
 // Represents player states (FSM)
 typedef enum Mp3_Player_State_Tag {
