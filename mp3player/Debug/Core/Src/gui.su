@@ -1,0 +1,14 @@
+gui.c:80:6:lcd_start	8	static
+gui.c:129:5:initialize_touchscreen	8	static
+gui.c:138:6:touchscreen_loop_init	8	static
+gui.c:149:18:check_touchscreen	48	static
+gui.c:210:6:update_actual_time	80	static
+gui.c:220:6:show_full_time	80	static
+gui.c:230:6:update_progress_bar	16	static
+gui.c:244:6:update_volume_bar	16	static
+gui.c:314:6:update_play_pause_button	32	static
+gui.c:252:6:refresh_screen	112	static
+gui.c:269:6:draw_buttons	48	static
+gui.c:117:6:draw_background	8	static
+gui.c:335:10:getXPix	8	static
+gui.c:339:10:getYPix	8	static

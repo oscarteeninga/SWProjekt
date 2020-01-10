@@ -1,0 +1,9 @@
+mp3_player.c:180:6:BSP_init	8	static
+mp3_player.c:243:5:frame_process	88	static
+mp3_player.c:186:6:player_play	40	static
+mp3_player.c:56:6:player_main	384	static
+mp3_player.c:300:6:BSP_AUDIO_OUT_TransferComplete_CallBack	8	static
+mp3_player.c:308:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	8	static
+mp3_player.c:316:5:read_mp3_file	32	static
+mp3_player.c:339:6:update_volume	8	static
+mp3_player.c:343:6:clear_state	0	static

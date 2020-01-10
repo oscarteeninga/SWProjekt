@@ -1450,14 +1450,7 @@ void StartDefaultTask(void const * argument)
 	  vTaskDelay(250);
   } while(Appli_state != APPLICATION_READY);
 
-
-  ////////////////////////////
-  ////////////////////////////
-
-  xprintf("Starting player...\n");
-  mp3_player_main("1:/");
-  xprintf("Player finished\n");
-  
+  player_main("1:/");
 
   /* Infinite loop */
   while(1);
