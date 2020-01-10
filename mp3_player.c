@@ -1,3 +1,8 @@
+/*
+ *	Main MP3 Player functionality
+ */
+
+/* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -9,7 +14,6 @@
 #include "term_io.h"
 #include "dbgu.h"
 #include "ansi.h"
-
 #define READ_BUFFER_SIZE 2 * MAINBUF_SIZE
 
 #define DECODED_MP3_FRAME_SIZE MAX_NGRAN * MAX_NCHAN * MAX_NSAMP
@@ -42,18 +46,18 @@ static int decode_result;
 int has_been_paused = 0;
 char gui_info_text[100];
 
-/* funkcje do obsługi grania */
+/* ------------------------------------------------------------------- */
 
 void BSP_init();
 void player_init();
-void player_main(const char *);
+void mp3_player_main(const char *);
 void player_play();
 int frame_process();
 int read_mp3_file();
 void clear_state();
 void update_volume();
 
-void player_main(const char* path) {
+void mp3_player_main(const char* path) {
 	BSP_init();
 	state = NEXT;
 

@@ -1,12 +1,6 @@
-/*
- *	Graphical User Interface
- *  Touchscreen
- */
-
-/* Includes ------------------------------------------------------------------*/
+#include <player.h>
 #include <stdio.h>
 #include <string.h>
-#include "mp3_player.h"
 #include "stm32746g_discovery_lcd.h"
 #include "fonts.h"
 #include "stm32746g_discovery_ts.h"
@@ -20,6 +14,7 @@
 #define LAYER_FG 1
 #define LAYER_BG 0
 
+/* stale konfigurowalne */
 #define CONTROL_BUTTON_SCALE 0.16
 #define CONTROL_BUTTON_SIZE CONTROL_BUTTON_SCALE * LCD_X_SIZE
 #define CONTROL_BUTTONS_NUMBER 6
@@ -41,7 +36,7 @@
 #define BAR_Y_POSITION 0.91
 #define TEXT_Y_POSITION 0.5
 
-/* ------------------------------------------------------------------- */
+/* zmienne globalne */
 
 static TS_StateTypeDef TS_State;
 static TS_StateTypeDef lastState;
@@ -59,7 +54,7 @@ Mp3_Player_State buttonState[CONTROL_BUTTONS_NUMBER] = { PREV, PLAY, STOP, NEXT,
 Mp3_Player_State playButtonState = PLAY;
 uint32_t lastTicks = 0;
 
-/* ------------------------------------------------------------------- */
+/* funkcje interfejsu */
 
 void lcd_start(void);
 void draw_background(void);
@@ -68,64 +63,43 @@ void touchscreen_loop_init(void);
 Mp3_Player_State check_touchscreen();
 void update_progress_bar(double);
 void update_actual_time(int);
-uint16_t getXPix (double factor);
-uint16_t getYPix (double factor);
 void refresh_screen(const char *info_text);
 void draw_buttons(void);
 void update_play_pause_button(void);
 
-/* ------------------------------------------------------------------- */
 
-// Initialize the LCD display (call this only once at the start of the player!)
 void lcd_start(void)
 {
-  /* LCD Initialization */
   BSP_LCD_Init();
 
-  /* LCD Initialization */
   BSP_LCD_LayerDefaultInit(LAYER_BG, (unsigned int)0xC0000000);
   BSP_LCD_LayerDefaultInit(LAYER_FG, (unsigned int)0xC0000000+(LCD_X_SIZE*LCD_Y_SIZE*8));
 
-  /* Enable the LCD */
   BSP_LCD_DisplayOn();
 
-  /* Select the LCD Background Layer  */
   BSP_LCD_SelectLayer(LAYER_BG);
 
-  /* Clear the Background Layer */
   BSP_LCD_Clear(BG_COLOR);
   BSP_LCD_SetBackColor(BG_COLOR);
 
-
-  /* Select the LCD Foreground Layer  */
   BSP_LCD_SelectLayer(LAYER_FG);
 
-  /* Clear the Foreground Layer */
   BSP_LCD_SetColorKeying(LAYER_FG,BG_COLOR);
   BSP_LCD_Clear(BG_COLOR);
   BSP_LCD_SetBackColor(BG_COLOR);
 
-
-  /* Configure the transparency for foreground and background :
-     Increase the transparency */
   BSP_LCD_SetTransparency(LAYER_BG, 0xFF);
   BSP_LCD_SetTransparency(LAYER_FG, 0xFF);
 }
 
-// Draw the screen background
-// Should be called only once to draw all the necessary screen elements
 void draw_background(void)
 {
-	/* Select the LCD Background Layer  */
 	BSP_LCD_SelectLayer(LAYER_BG);
 	draw_buttons();
 	
-	//select Foreground Layer
 	BSP_LCD_SelectLayer(LAYER_FG);
 }
 
-// Initialize the touchscreen
-// Should be called once, to create all the necessary structures
 int initialize_touchscreen(void)
 {
 	uint8_t status = 0;
@@ -134,7 +108,6 @@ int initialize_touchscreen(void)
 	return 0;
 }
 
-// Call this once to init the TS-input-reading-loop
 void touchscreen_loop_init(void)
 {
     newX = 120;
@@ -144,8 +117,6 @@ void touchscreen_loop_init(void)
 	BSP_LCD_SetColorKeying(LAYER_FG, BG_COLOR);
 }
 
-// Single iteration of getting TS input
-// RETURNS: new state according to the user choice or EMPTY if no new choice has been made
 Mp3_Player_State check_touchscreen()
 {	
 	uint32_t currentTicks = HAL_GetTick();
@@ -261,44 +232,36 @@ void refresh_screen(const char *info_text) {
 	sprintf(buf, " %s", info_text);
 	BSP_LCD_DisplayStringAt(0, YPix(TEXT_Y_POSITION), (unsigned char *)buf,CENTER_MODE);
 
-	// Play/Pause Button (update label)
 	update_play_pause_button();
 }
 
-// Draw the 4 main state control buttons: PREV/PLAY_PAUSE/STOP/NEXT
 void draw_buttons() {
 
 	BSP_LCD_SetTextColor(BUTTON_COLOR);
 	uint16_t xButton, yButton;
 	
-	// Previous button label
 	xButton = buttonsLeftUpper[0][0];
 	yButton = buttonsLeftUpper[0][1];
 	Point Points1[]= {{xButton + 7, yButton + CONTROL_BUTTON_SIZE / 2}, {xButton + CONTROL_BUTTON_SIZE / 2, yButton + 7}, 
 		{xButton + CONTROL_BUTTON_SIZE / 2, yButton + 7 + CONTROL_BUTTON_SIZE*0.806}};
 
-	// Control button size in pixels is 72
 	BSP_LCD_FillPolygon(Points1, 3);
 	Points1[0].X += CONTROL_BUTTON_SIZE*0.4;
 	Points1[1].X += CONTROL_BUTTON_SIZE*0.4;
 	Points1[2].X += CONTROL_BUTTON_SIZE*0.4;
 	BSP_LCD_FillPolygon(Points1, 3);
 
-	// Play/Pause button label
 	update_play_pause_button();
 
-	// Volume control button
 	BSP_LCD_SetTextColor(BUTTON_COLOR);
 	BSP_LCD_DisplayStringAt(15, 29, (unsigned char *)"-", LEFT_MODE);
 	BSP_LCD_DisplayStringAt(LCD_X_SIZE - 30, 29, (unsigned char *)"+", LEFT_MODE);
 
-	// Stop button label
 	BSP_LCD_SetTextColor(BUTTON_COLOR);
 	xButton = buttonsLeftUpper[2][0];
 	yButton = buttonsLeftUpper[2][1];
 	BSP_LCD_FillRect(xButton, yButton + 7, CONTROL_BUTTON_SIZE - 14, CONTROL_BUTTON_SIZE - 14);
 
-	// Next button label
 	xButton = buttonsLeftUpper[3][0];
 	yButton = buttonsLeftUpper[3][1];
 	Point Points3[]= {{xButton + 7, yButton + 7}, {xButton + 7, yButton + 7 + CONTROL_BUTTON_SIZE*0.806},
@@ -310,13 +273,11 @@ void draw_buttons() {
 	BSP_LCD_FillPolygon(Points3, 3);
 }
 
-// Refresh only the PLAY/PAUSE button
 void update_play_pause_button() {
 
 	BSP_LCD_SelectLayer(LAYER_BG);
 	uint16_t xButton = buttonsLeftUpper[1][0];
 	uint16_t yButton = buttonsLeftUpper[1][1];
-	// Clear field under previous displayed button
 	BSP_LCD_SetTextColor(BG_COLOR);
 	BSP_LCD_FillRect(xButton, yButton, CONTROL_BUTTON_SIZE, CONTROL_BUTTON_SIZE);
 	BSP_LCD_SetTextColor(BUTTON_COLOR);
@@ -329,13 +290,4 @@ void update_play_pause_button() {
 		BSP_LCD_FillRect(xButton + 7 + CONTROL_BUTTON_SIZE*0.431, yButton + 7, CONTROL_BUTTON_SIZE*0.27, CONTROL_BUTTON_SIZE - 14);
 	}
 
-}
-
-// Auxillary functions
-uint16_t getXPix (double factor)  {
-	return factor * LCD_X_SIZE;
-}
-
-uint16_t getYPix (double factor)  {
-	return factor * LCD_Y_SIZE;
 }

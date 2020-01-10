@@ -54,7 +54,7 @@
 #include "usb_host.h"
 
 /* USER CODE BEGIN Includes */
-#include "mp3_player.h"
+#include "player.h"
 #include "gui.h"
 
 #include  <errno.h>
