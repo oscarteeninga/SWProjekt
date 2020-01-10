@@ -27,7 +27,7 @@ typedef enum BUFFER_STATE_ENUM {
 /* zmienne globalne */
 
 static HMP3Decoder hMP3Decoder;
-Mp3_Player_State state;
+Player_State state;
 uint8_t input_buffer[READ_BUFFER_SIZE];
 static uint8_t *current_ptr;
 int currentFilePosition = -1;
@@ -161,7 +161,7 @@ void player_main(const char* path) {
 			sprintf(gui_info_text, "STOP");
 			refresh_screen(gui_info_text);
 			while (state == STOP) {
-				Mp3_Player_State newState = check_touchscreen();
+				Player_State newState = check_touchscreen();
 				if (newState != EMPTY)
 					state = newState;
 			}
@@ -201,7 +201,7 @@ void player_play() {
 			}
 			update_progress_bar(
 					((double) currentFileBytesRead) / currentFileBytes);
-			Mp3_Player_State newState = check_touchscreen();
+			Player_State newState = check_touchscreen();
 			if (newState == VOLUMEUP) {
 				if (volume < 100)
 					volume += 10;

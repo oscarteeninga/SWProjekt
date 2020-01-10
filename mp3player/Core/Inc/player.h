@@ -4,7 +4,7 @@
 void player_main(const char*);
 
 // Represents player states (FSM)
-typedef enum Mp3_Player_State_Tag {
+typedef enum Player_State_Tag {
     PLAY,
     PAUSE,
     STOP,
@@ -14,6 +14,6 @@ typedef enum Mp3_Player_State_Tag {
 	VOLUMEUP,
 	VOLUMEDOWN,
 	EMPTY
-} Mp3_Player_State;
+} Player_State;
 
 #endif

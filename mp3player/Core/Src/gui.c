@@ -50,8 +50,8 @@ uint16_t buttonsLeftUpper[CONTROL_BUTTONS_NUMBER][2] = {
 	{0, 0},
 	{XPix(0.9), 0}
 };
-Mp3_Player_State buttonState[CONTROL_BUTTONS_NUMBER] = { PREV, PLAY, STOP, NEXT, VOLUMEDOWN, VOLUMEUP };
-Mp3_Player_State playButtonState = PLAY;
+Player_State buttonState[CONTROL_BUTTONS_NUMBER] = { PREV, PLAY, STOP, NEXT, VOLUMEDOWN, VOLUMEUP };
+Player_State playButtonState = PLAY;
 uint32_t lastTicks = 0;
 
 /* funkcje interfejsu */
@@ -60,7 +60,7 @@ void lcd_start(void);
 void draw_background(void);
 int initialize_touchscreen(void);
 void touchscreen_loop_init(void);
-Mp3_Player_State check_touchscreen();
+Player_State check_touchscreen();
 void update_progress_bar(double);
 void update_actual_time(int);
 void refresh_screen(const char *info_text);
@@ -117,7 +117,7 @@ void touchscreen_loop_init(void)
 	BSP_LCD_SetColorKeying(LAYER_FG, BG_COLOR);
 }
 
-Mp3_Player_State check_touchscreen()
+Player_State check_touchscreen()
 {	
 	uint32_t currentTicks = HAL_GetTick();
 	
