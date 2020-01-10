@@ -1,3 +1,0 @@
-imdct.c:132:13:WinPrevious.part.0	28	static,ignoring_inline_asm
-imdct.c:185:12:FreqInvertRescale	96	static
-imdct.c:717:5:xmp3fixpt_IMDCT	344	static,ignoring_inline_asm
