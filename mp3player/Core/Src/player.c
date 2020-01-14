@@ -1,8 +1,3 @@
-/*
- *	Main MP3 Player functionality
- */
-
-/* Includes ------------------------------------------------------------------*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
