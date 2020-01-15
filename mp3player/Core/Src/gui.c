@@ -132,12 +132,9 @@ Player_State check_touchscreen() {
 	if (TS_State.touchDetected == 0) {
 		return EMPTY;
 	}
-	if ((TS_State.touchX[0] & 0x0FFF) >= 10) {
-		newX = TS_State.touchX[0] & 0x0FFF;
-	}
-	if ((TS_State.touchY[0] & 0x0FFF) >= 10) {
-		newY = TS_State.touchY[0] & 0x0FFF;
-	}
+
+	newX = TS_State.touchX[0];
+	newY = TS_State.touchY[0];
 
 	lastState.touchX[0] = newX;
 	lastState.touchY[0] = newY;
